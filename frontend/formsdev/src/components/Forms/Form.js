@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../../services/axios";
 import { Link } from "react-router-dom";
 import InputMask from "react-input-mask";
@@ -8,14 +8,20 @@ export default function Form() {
   const [cnpj, setCnpj] = useState("");
   const [dataDeCriacao, setDataDeCriacao] = useState("");
   const [numero, setNumero] = useState("");
+  const [estados, setEstados] = useState([]);
 
   async function createEmpresa() {
     const response = await axios.post("/empresas", {
-      nome,
-      cnpj,
+      nome: '',
+      cnpj: '',
       data_de_criacao: dataDeCriacao,
       endereco: {
-        numero
+        logradouro: '',
+        endereco: '',
+        numero: '',
+        cep: '',
+        estado: '',
+        cidade: estados.cidade
       },
     });
     const { data } = response;
@@ -26,15 +32,10 @@ export default function Form() {
   }
 
   React.useEffect(() => {
-    async function getEstado() {
-      const response = await axios.get("/estados");
-      const { data } = response;
-
-      console.log(data);
-    }
-
-    getEstado();
-  });
+    axios.get("/estados").then(response => {
+      setEstados(response.data);
+    })
+  },[]);
 
   console.log(this);
 
@@ -156,9 +157,9 @@ export default function Form() {
         </label>
         <select className="form-select" id="validationCustom04" required>
           <option selected disabled value="">
-            {}
-          </option>
-          <option>`${}`</option>
+            Escolha um estado
+          </option>        
+          {estados.map(estado => (<option key={estado.id} value={estado.id}>{estado.nome}</option>))}
         </select>
         <div className="col-md-12">
           <label for="validationCustom04" className="form-label">
