@@ -26,7 +26,6 @@ class EmpresasController < ApplicationController
 
     respond_to do |format|
       if @empresa.save
-        byebug
         format.html { redirect_to @empresa, notice: "Empresa was successfully created." }
         format.json { render :show, status: :created, location: @empresa }
       else
@@ -76,13 +75,3 @@ class EmpresasController < ApplicationController
     # end
 
 end
-
-
-# t.string "logradouro"
-#     t.string "endereco"
-#     t.decimal "numero"
-#     t.string "cep"
-#     t.datetime "created_at", precision: 6, null: false
-#     t.datetime "updated_at", precision: 6, null: false
-#     t.bigint "empresa_id", null: false
-#     t.bigint "cidade_id", null: false

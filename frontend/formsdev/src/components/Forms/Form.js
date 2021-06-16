@@ -8,37 +8,50 @@ export default function Form() {
   const [cnpj, setCnpj] = useState("");
   const [dataDeCriacao, setDataDeCriacao] = useState("");
   const [numero, setNumero] = useState("");
+  const [logradouro, setLogradouro] = useState("");
+  const [endereco, setEndereco] = useState("");
+  const [cep, setCep] = useState("");
   const [estados, setEstados] = useState([]);
+  const [cidades, setCidades] = useState([]);
+  const [cidadeId, setCidadeId] = useState([]);
 
   async function createEmpresa() {
     const response = await axios.post("/empresas", {
-      nome: '',
-      cnpj: '',
+      nome: nome,
+      cnpj: cnpj,
       data_de_criacao: dataDeCriacao,
       endereco: {
-        logradouro: '',
-        endereco: '',
-        numero: '',
-        cep: '',
-        estado: '',
-        cidade: estados.cidade
+        logradouro: logradouro,
+        endereco: endereco,
+        numero: numero,
+        cep: cep,
+        cidade_id: cidadeId
       },
     });
     const { data } = response;
 
     return data;
+  }
 
-    console.log(data);
+  async function setEstadoId(id) {
+    axios.get("/cidades", {params: {estado_id: id}}).then((response) => {
+      setCidades(response.data);
+    });
   }
 
   React.useEffect(() => {
-    axios.get("/estados").then(response => {
+    axios.get("/estados").then((response) => {
       setEstados(response.data);
-    })
-  },[]);
+    });
+  }, []);
 
-  console.log(this);
+  // React.useEffect(() => {
+  //   axios.get("/cidades").then((response) => {
+  //     setCidades(response.data);
+  //   });
+  // }, []);
 
+  function handleInputChange(e) {}
   return (
     <form className="row" novalidate>
       <section>
@@ -72,6 +85,8 @@ export default function Form() {
               mask="99.999.999/9999-99"
               placeholder="99.999.999/9999-99"
               required
+              value={cnpj}
+              onChange={(e) => setCnpj(e.target.value)}
             />
           </div>
         </div>
@@ -87,6 +102,8 @@ export default function Form() {
               id="validationCustom02"
               placeholder="Data de Criação"
               required
+              value={dataDeCriacao}
+              onChange={(e) => setDataDeCriacao(e.target.value)}
             />
           </div>
         </div>
@@ -99,7 +116,9 @@ export default function Form() {
             <label for="validationCustom04" className="form-label">
               Logradouro
             </label>
-            <select className="form-select" id="validationCustom04" required>
+            <select className="form-select" id="validationCustom04" required
+            value={logradouro}
+            onChange={(e) => setLogradouro(e.target.value)}>
               <option selected disabled value="">
                 Choose...
               </option>
@@ -119,16 +138,21 @@ export default function Form() {
               id="validationCustom02"
               placeholder="Endereço"
               required
-              // value={endereco}
-              // onChange={(e) => setEndereco(e.target.value)}
+              value={endereco}
+              onChange={(e) => setEndereco(e.target.value)}
             />
           </div>
           <div className="col-md-1">
             <label for="validationCustom05" className="form-label">
               Número
             </label>
-            <input type="text" className="form-control" placeholder="Número" value={numero}
-              onChange={e => setNumero(e.target.value)}/>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Número"
+              value={numero}
+              onChange={(e) => setNumero(e.target.value)}
+            />
           </div>
           <div className="col-md-1">
             <label for="validationCustom02" className="form-label">
@@ -141,6 +165,8 @@ export default function Form() {
               placeholder="99999-999"
               mask="99999-999"
               required
+              value={cep}
+              onChange={(e) => setCep(e.target.value)}
             />
           </div>
           <div className="col-md-1" />
@@ -155,21 +181,31 @@ export default function Form() {
         <label for="validationCustom03" className="form-label">
           Estado
         </label>
-        <select className="form-select" id="validationCustom04" required>
+        <select className="form-select" id="validationCustom04" required
+              onChange={(e) => setEstadoId(e.target.value)}>
           <option selected disabled value="">
             Escolha um estado
-          </option>        
-          {estados.map(estado => (<option key={estado.id} value={estado.id}>{estado.nome}</option>))}
+          </option>
+          {estados.map((estado) => (
+            <option key={estado.id} value={estado.id}>
+              {estado.nome}
+            </option>
+          ))}
         </select>
         <div className="col-md-12">
           <label for="validationCustom04" className="form-label">
-            City
+            Cidade
           </label>
-          <select className="form-select" id="validationCustom04" required>
+          <select className="form-select" id="validationCustom04" required
+            onChange={(e) => setCidadeId(e.target.value)}>>
             <option selected disabled value="">
-              Choose...
+              Escolha a cidade
             </option>
-            <option>...</option>
+            {cidades.map((cidade) => (
+            <option key={cidade.id} value={cidade.id}>
+              {cidade.nome}
+            </option>
+          ))}
           </select>
         </div>
       </div>

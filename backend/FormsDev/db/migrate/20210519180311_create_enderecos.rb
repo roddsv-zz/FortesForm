@@ -3,7 +3,7 @@ class CreateEnderecos < ActiveRecord::Migration[6.1]
     create_table :enderecos do |t|
       t.string :logradouro
       t.string :endereco
-      t.numeric :numero
+      t.integer :numero
       t.string :cep
 
       t.timestamps

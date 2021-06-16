@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2021_06_11_174801) do
 
   create_table "empresas", force: :cascade do |t|
     t.string "nome"
-    t.decimal "cnpj"
+    t.string "cnpj"
     t.date "data_de_criacao"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 2021_06_11_174801) do
   create_table "enderecos", force: :cascade do |t|
     t.string "logradouro"
     t.string "endereco"
-    t.decimal "numero"
+    t.integer "numero"
     t.string "cep"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
